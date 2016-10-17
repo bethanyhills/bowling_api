@@ -1,3 +1,3 @@
-from .player import *
 from .game import *
+from .player import *
 from .frame import *
