@@ -33,32 +33,45 @@ class Frame(db.Model):
         rolls_left = 2
         pins_left = 10
         while rolls_left > 0:
+            #handle extra rolls in 10th frame
+            if self.frame_number == 10:
+                #add extra rolls if needed
+                rolls_left += self.extra_rolls()
             pins_hit = randint(0, pins_left)
-            self.frame_number += pins_hit
+            self.frame_score += pins_hit
             self.roll_count += 1
             #if strike, break
-            if pins_hit == 10:
+            if self.strike():
                 rolls_left = 0
             else:
                 #continue to 2nd role
                 pins_left = 10 - pins_hit
                 rolls_left -= 1
+
         db.session.add(self)
         db.session.commit()
 
-    #determine if strike for scoring
+    # determine if strike
     def strike(self):
-        if self.role_count == 1 and self.frame_score == 10:
+        if self.roll_count == 1 and self.frame_score == 10:
             return True
         else:
             return False
 
-    #determine if spare for scoring
+    # determine if spare
     def spare(self):
-        if self.role_count == 2 and self.frame_score == 10:
+        if self.roll_count == 2 and self.frame_score == 10:
             return True
         else:
             return False
+
+    def extra_rolls(self):
+        if self.spare():
+            return 1
+        if self.strike():
+            return 2
+        return 0
+
 
 
 
