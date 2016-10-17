@@ -29,3 +29,24 @@ class Player(db.Model):
     def __repr__(self):
         return '<Player %r>' % (self.name)
 
+    def calculate_score(self):
+        #calculate score - taking into consideration strikes and spares
+        frames = self.frames.all()
+        score = 0
+        for i, frame in enumerate(frames):
+            #add frame score
+            score += frame.frame_score
+            #if frame was strike or spare, calculate extra points
+            if frame.score == 10:
+                extra_points = self.calculate_bonus(i, frames)
+                score += extra_points
+
+    def calculate_bonus(self, i, frames):
+        if frame.strike():
+            return frames[i+1].frame_score
+        if frame.spare():
+            return frames[i+1].roll1
+
+
+
+

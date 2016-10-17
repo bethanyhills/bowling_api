@@ -14,6 +14,9 @@ class Frame(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     #define the 1 side of the 1 to many relationship of player to frames
     player_id = db.Column(db.Integer, db.ForeignKey('player.id'))
+    roll1 = db.Column(db.Integer)
+    roll2 = db.Column(db.Integer)
+    roll3 = db.Column(db.Integer)
     frame_number = db.Column(db.Integer)
     frame_score = db.Column(db.Integer)
     roll_count = db.Column(db.Integer)

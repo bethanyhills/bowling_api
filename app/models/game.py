@@ -13,17 +13,14 @@ class Game(db.Model):
     players = db.relationship('Player', backref='game', lazy='dynamic')
 
     def __init__(self, players= []):
-        #TODO: take a list of players, create player, associate to game
+        #take a list of players, create player, associate to game
         if players:
-            print (players)
             for player in players:
-                print (player)
                 p = Player(player, self)
                 self.players.append(p)
                 db.session.add(p)
         db.session.add(self)
         db.session.commit()
-
 
 
     def __repr__(self):
