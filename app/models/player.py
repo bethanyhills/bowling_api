@@ -37,14 +37,23 @@ class Player(db.Model):
             #add frame score
             score += frame.frame_score
             #if frame was strike or spare, calculate extra points
-            if frame.score == 10:
-                extra_points = self.calculate_bonus(i, frames)
+            if frame.strike() or frame.spare():
+                extra_points = self.calculate_bonus(i, frame, frames)
                 score += extra_points
+        self.running_score = score
+        db.session.add(self)
 
-    def calculate_bonus(self, i, frames):
+    def calculate_bonus(self, i, frame, frames):
+        #if this is the most recent frame played, return. No frames exist yet to score the bonus points
+        if frame == frames[-1]:
+            return 0
+        #add the following 2 rolls
         if frame.strike():
+            print ('strike points {}'.format(frames[i+1].frame_score))
             return frames[i+1].frame_score
+        #add the next roll
         if frame.spare():
+            print ('spare points {}'.format(frames[i+1].roll1))
             return frames[i+1].roll1
 
 

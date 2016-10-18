@@ -27,29 +27,34 @@ class Frame(db.Model):
         self.roll_count = 0
         self.frame_number = frame_number
         db.session.add(self)
+        db.session.commit()
 
     def __repr__(self):
-        return '<Current Score %r>' % (self.frame_score)
+        return '<Frame Score %r>' % (self.frame_score)
 
-    #2 rolls allowed per turn. Those 2 rolls make up a frame.
+    #defines a turn - 2 rolls to make up a frame. 3 potentially if its the 10th frame.
     def take_turn(self):
-        rolls_left = 2
+        rolls_allowed = 2
         pins_left = 10
-        while rolls_left > 0:
+        while self.roll_count < rolls_allowed :
             #handle extra rolls in 10th frame
-            if self.frame_number == 10:
-                #add extra rolls if needed
-                rolls_left += self.extra_rolls()
             pins_hit = randint(0, pins_left)
             self.frame_score += pins_hit
             self.roll_count += 1
+
+            #record individual roll scores
+            self.parse_rolls(pins_hit)
+
             #if strike, break
             if self.strike():
-                rolls_left = 0
+                rolls_allowed = 0
             else:
-                #continue to 2nd role
+                #continue to the next role
                 pins_left = 10 - pins_hit
-                rolls_left -= 1
+
+            if self.frame_number == 10:
+                # add extra rolls if needed
+                rolls_allowed += self.extra_rolls()
 
         db.session.add(self)
         db.session.commit()
@@ -68,11 +73,24 @@ class Frame(db.Model):
         else:
             return False
 
+    #record individual roll scores
+    def parse_rolls(self, pins_hit):
+        if self.roll_count == 1:
+            self.roll1 = pins_hit
+        elif self.roll_count == 2:
+            self.roll2 = pins_hit
+        else:
+            self.roll3 = pins_hit
+
+
     def extra_rolls(self):
+        #only get a spare on 2nd roll. add 1 more roll to allow a final roll for a total of 3
         if self.spare():
+            print("1 extra roll")
             return 1
+        #increment total allowed rolls to 3
         if self.strike():
-            return 2
+            return 3
         return 0
 
 
