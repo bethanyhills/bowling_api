@@ -1,5 +1,7 @@
 from app import db
 from app.models.player import Player
+import pdb
+import ast
 '''
 defines our Game model.
 Many players to a game.
@@ -15,10 +17,13 @@ class Game(db.Model):
     def __init__(self, players= []):
         #take a list of players, create player, associate to game
         if players:
-            for player in players:
-                p = Player(player, self)
-                self.players.append(p)
-                db.session.add(p)
+            #convert string to list
+            if isinstance(players, str):
+                list_players = ast.literal_eval(players)
+                for player in list_players:
+                    p = Player(player, self)
+                    self.players.append(p)
+                    db.session.add(p)
         db.session.add(self)
         db.session.commit()
 
@@ -32,6 +37,7 @@ class Game(db.Model):
             player.calculate_score()
             scores[player.name] = player.current_score
         return scores
+
 
     def delete(self):
         db.session.delete(self)
