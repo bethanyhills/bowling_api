@@ -25,3 +25,14 @@ class Game(db.Model):
 
     def __repr__(self):
         return '<Players %r>' % (self.players)
+
+    def get_scores(self):
+        scores = {}
+        for player in self.players:
+            player.calculate_score()
+            scores[player.name] = player.current_score
+        return scores
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()

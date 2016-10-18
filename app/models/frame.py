@@ -86,7 +86,6 @@ class Frame(db.Model):
     def extra_rolls(self):
         #only get a spare on 2nd roll. add 1 more roll to allow a final roll for a total of 3
         if self.spare():
-            print("1 extra roll")
             return 1
         #increment total allowed rolls to 3
         if self.strike():

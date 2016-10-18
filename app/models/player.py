@@ -16,10 +16,7 @@ class Player(db.Model):
     #defines one to many relationship of player to frames. join loads the relationship in the same query as the parent.
     #dynamic is used for many items - it returns a query object
     frames = db.relationship('Frame', backref='player', lazy='dynamic')
-
-    #TODO: allow a player to play multiple games at once? If so move these to their own table
-    running_score = db.Column(db.Integer)
-    final_score = db.Column(db.Integer)
+    current_score = db.Column(db.Integer)
 
     def __init__(self, name, game):
         self.name = name
@@ -40,7 +37,7 @@ class Player(db.Model):
             if frame.strike() or frame.spare():
                 extra_points = self.calculate_bonus(i, frame, frames)
                 score += extra_points
-        self.running_score = score
+        self.current_score = score
         db.session.add(self)
 
     def calculate_bonus(self, i, frame, frames):
@@ -49,11 +46,9 @@ class Player(db.Model):
             return 0
         #add the following 2 rolls
         if frame.strike():
-            print ('strike points {}'.format(frames[i+1].frame_score))
             return frames[i+1].frame_score
         #add the next roll
         if frame.spare():
-            print ('spare points {}'.format(frames[i+1].roll1))
             return frames[i+1].roll1
 
 
