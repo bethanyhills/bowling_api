@@ -2,6 +2,8 @@ from app import db
 from app.models.player import Player
 import pdb
 import ast
+import json
+
 '''
 defines our Game model.
 Many players to a game.

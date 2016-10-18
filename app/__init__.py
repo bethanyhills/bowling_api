@@ -9,9 +9,10 @@ api = Api(app)
 
 from app import models
 
-from app.resources import NewGameResource, GameResource
+from app.resources import NewGameResource, GameResource, TurnResource
 
 
 api.add_resource(NewGameResource, '/game')
 api.add_resource(GameResource, '/game/<string:game_id>')
+api.add_resource(TurnResource, '/game/<string:game_id>/turn')
 
