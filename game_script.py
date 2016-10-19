@@ -44,4 +44,3 @@ for frame in range(1, 11):
     #report on current scores
     print (get_current_scores(str(game['game_id'])))
 
-

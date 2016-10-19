@@ -15,7 +15,7 @@ class Game(db.Model):
     #defines the 1 to many relationship of game to players
     players = db.relationship('Player', backref='game', lazy='dynamic')
 
-    def __init__(self, players= []):
+    def __init__(self, players=[]):
         #take a list of players, create player, associate to game
         if players:
             for player in players:
