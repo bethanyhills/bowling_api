@@ -1,4 +1,5 @@
 from flask.ext.restful import Resource, reqparse, fields, marshal_with
+from flask import jsonify
 import json
 import pdb
 
@@ -11,11 +12,15 @@ class NewGameResource(Resource):
     '''
     def post(self):
         parser = reqparse.RequestParser()
-        parser.add_argument('players')
+        parser.add_argument('players', action='append')
         args = parser.parse_args()
         if args['players']:
             game = Game(args['players'])
-            return {'Game': game.id}
+            players = game.get_players()
+            response = {}
+            response['game_id'] = game.id
+            response['players'] = players
+        return response
 
 
 class GameResource(Resource):
@@ -26,4 +31,7 @@ class GameResource(Resource):
     def get(self, game_id):
         game = Game.query.filter_by(id=game_id).first()
         scores = game.get_scores()
-        return {'Game': game.id, 'Scores': scores}
+        response = {}
+        response['game_id'] = game.id
+        response['scores'] = scores
+        return response

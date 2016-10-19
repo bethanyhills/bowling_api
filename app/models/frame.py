@@ -1,12 +1,12 @@
 from random import randint
 
 from app import db
-#from app.models.player import Player
 
 '''
 Defines our Frame model.
-There are two turns per Frame.
-A maximum of 13 frame are possible.
+There are two turns/rolls per Frame
+(with the exception of the final frame where a strike earns 2 extra rolls and a spare earns 1 extra roll)
+A maximum of 10 frames are possible.
 
 '''
 

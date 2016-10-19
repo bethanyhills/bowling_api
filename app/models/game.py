@@ -5,8 +5,7 @@ import ast
 import json
 
 '''
-defines our Game model.
-Many players to a game.
+defines our Game model
 
 '''
 
@@ -19,13 +18,10 @@ class Game(db.Model):
     def __init__(self, players= []):
         #take a list of players, create player, associate to game
         if players:
-            #convert string to list
-            if isinstance(players, str):
-                list_players = ast.literal_eval(players)
-                for player in list_players:
-                    p = Player(player, self)
-                    self.players.append(p)
-                    db.session.add(p)
+            for player in players:
+                p = Player(player, self)
+                self.players.append(p)
+                db.session.add(p)
         db.session.add(self)
         db.session.commit()
 
@@ -40,6 +36,11 @@ class Game(db.Model):
             scores[player.name] = player.current_score
         return scores
 
+    def get_players(self):
+        players = {}
+        for player in self.players:
+           players[player.name] = player.id
+        return players
 
     def delete(self):
         db.session.delete(self)

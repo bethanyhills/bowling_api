@@ -11,7 +11,7 @@ from app import models
 
 from app.resources import NewGameResource, GameResource, TurnResource
 
-
+#define our endpoints for game creation, getting current game scores, and simulating a turn/frame for a player
 api.add_resource(NewGameResource, '/game')
 api.add_resource(GameResource, '/game/<string:game_id>')
 api.add_resource(TurnResource, '/game/<string:game_id>/turn')

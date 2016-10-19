@@ -24,7 +24,7 @@ class Player(db.Model):
         db.session.add(self)
 
     def __repr__(self):
-        return '<Player %r>' % (self.name)
+        return '%r' % (self.id)
 
     def calculate_score(self):
         #calculate score - taking into consideration strikes and spares
@@ -39,6 +39,7 @@ class Player(db.Model):
                 score += extra_points
         self.current_score = score
         db.session.add(self)
+        db.session.commit()
 
     def calculate_bonus(self, i, frame, frames):
         #if this is the most recent frame played, return. No frames exist yet to score the bonus points
@@ -50,6 +51,7 @@ class Player(db.Model):
         #add the next roll
         if frame.spare():
             return frames[i+1].roll1
+
 
 
 
