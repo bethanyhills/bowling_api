@@ -8,6 +8,7 @@ db = SQLAlchemy(app)
 api = Api(app)
 
 from app import models
+db.create_all()
 
 from app.resources import NewGameResource, GameResource, TurnResource
 
