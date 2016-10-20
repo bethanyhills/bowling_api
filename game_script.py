@@ -13,7 +13,6 @@ def new_game():
     headers = {'Content-type': 'application/json'}
     data = {'players': ['harry','voldemort','ron']}
     game = requests.post(url, data=json.dumps(data), headers=headers)
-    print game.json()
     return game.json()
 
 def get_current_scores(game_id):

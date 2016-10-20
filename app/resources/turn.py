@@ -23,9 +23,9 @@ class TurnResource(Resource):
             turn.take_turn()
             #calculate current score
             player.calculate_score()
-            return {'Current Score': str(player.current_score)}, 200
+            return {'ID': player.id, 'Current Score': str(player.current_score)}, 200
         else:
-            return {'Final Score': str(player.current_score)}, 200
+            return {'ID': player.id, 'Final Score': str(player.current_score)}, 200
 
 
 
