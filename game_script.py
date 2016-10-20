@@ -11,7 +11,7 @@ def new_game():
 
     '''
     headers = {'Content-type': 'application/json'}
-    data = {'players': ['harry','voldemort','ron']}
+    data = {'players': ['Harry','Voldemort','Dumbledore']}
     game = requests.post(url, data=json.dumps(data), headers=headers)
     return game.json()
 
@@ -33,6 +33,12 @@ def take_turn(game_id, player_id):
     turn = requests.put(url + '/{}/turn'.format(game_id), data=json.dumps(data), headers=headers)
     return turn.json()
 
+def winner(game_id):
+    players = get_current_scores(game_id)
+    scores = players['scores']
+    winner = max(scores.keys(), key=lambda k: scores[k])
+    return winner
+
 #create a new game
 game = new_game()
 #define frames to play (10 is standard)
@@ -42,4 +48,5 @@ for frame in range(1, 11):
         take_turn(str(game['game_id']), id)
     #report on current scores
     print (get_current_scores(str(game['game_id'])))
+print ('The Winner is {}!'.format(winner(str(game['game_id']))))
 
